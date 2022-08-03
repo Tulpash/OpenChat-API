@@ -5,6 +5,7 @@ using OpenChat.API.Data;
 using OpenChat.API.Hubs;
 using OpenChat.API.Models;
 using OpenChat.API.Other;
+using OpenChat.API.Managers;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters = JwtConfiguration.ValidationParameters();
-}).AddGoogle();
+});
+builder.Services.AddScoped<ChatManager>();
 
 
 var app = builder.Build();

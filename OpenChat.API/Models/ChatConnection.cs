@@ -2,7 +2,7 @@
 {
     public class ChatConnection
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; } = null!;
 
         public DateTime ConnectedAt { get;  set; }
     }

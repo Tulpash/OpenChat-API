@@ -14,6 +14,6 @@ namespace OpenChat.API.Models
 
         //SignalR connections ref
         [NotMapped]
-        public ChatConnection[] Connections { get; set; } = null!;
+        public List<ChatConnection> Connections { get; set; } = null!;
     }
 }

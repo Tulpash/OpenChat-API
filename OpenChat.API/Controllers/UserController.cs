@@ -41,7 +41,7 @@ namespace OpenChat.API.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("signin")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
             //Validate params
@@ -50,6 +50,7 @@ namespace OpenChat.API.Controllers
             {
                 return NotFound($"User with email: {model.Email} not found");
             }
+            //Chek user password
             var checkPass = await userManager.CheckPasswordAsync(user, model.Password);
             if (!checkPass)
             {
