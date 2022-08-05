@@ -37,7 +37,7 @@ namespace OpenChat.API.Controllers
             {
                 return BadRequest(res.Errors.Select(e => e.Description));
             }
-            return Ok(user);
+            return NoContent();
         }
 
         [HttpPost]
@@ -63,7 +63,7 @@ namespace OpenChat.API.Controllers
             };
             //Create token
             string token = JwtConfiguration.CreateToken(claims);
-            return Ok(token);
+            return Ok(new { Id = user.Id, Login = user.Email, FirstName = user.FirstName, LastName = user.LastName, Token = token });
         }
     }
 }

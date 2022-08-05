@@ -6,7 +6,7 @@ using OpenChat.API.Hubs;
 using OpenChat.API.Models;
 using OpenChat.API.Other;
 using OpenChat.API.Managers;
-using Microsoft.AspNetCore.Mvc;
+using OpenChat.API.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -18,11 +18,25 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddDbContext<MainContext>(options => options.UseSqlServer(configuration.GetConnectionString("Deff")));
 builder.Services.AddIdentityCore<ChatUser>().AddEntityFrameworkStores<MainContext>();
-builder.Services.AddCors(options => options.AddDefaultPolicy(options => options.WithOrigins("http://localhost:3000/").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+builder.Services.AddCors(options => options.AddDefaultPolicy(options => options.WithOrigins("http://localhost:3000", "https://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters = JwtConfiguration.ValidationParameters();
+    options.Events = new JwtBearerEvents()
+    {
+        OnMessageReceived = (context) =>
+        {
+            string token = context.Request.Query["token"];
+            string path = context.HttpContext.Request.Path;
+            if (!String.IsNullOrEmpty(token) && path.StartsWith("/hubs/chat"))
+            {
+                context.Token = token;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 builder.Services.AddScoped<ChatManager>();
 
@@ -39,6 +53,6 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("/hubs/chat");
 app.MapControllers();
 app.Run();

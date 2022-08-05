@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using OpenChat.API.Managers;
+using OpenChat.API.Interfaces;
 
 namespace OpenChat.API.Hubs
 {

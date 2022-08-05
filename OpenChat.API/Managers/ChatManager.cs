@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using OpenChat.API.Interfaces;
 using OpenChat.API.Models;
 
 namespace OpenChat.API.Managers
 {
-    public class ChatManager
+    public class ChatManager : IChatManager
     {
         private readonly UserManager<ChatUser> userManager;
         private static readonly List<ChatUser> users = null!;
