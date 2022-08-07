@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OpenChat.API.Interfaces;
 using OpenChat.API.Managers;
 
 namespace OpenChat.API.Controllers
@@ -10,9 +11,9 @@ namespace OpenChat.API.Controllers
     [Authorize]
     public class TestController : ControllerBase
     {
-        private readonly ChatManager chatManager;
+        private readonly IChatManager chatManager;
 
-        public TestController(ChatManager chatManager)
+        public TestController(IChatManager chatManager)
         {
             this.chatManager = chatManager;
         }

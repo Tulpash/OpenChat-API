@@ -5,6 +5,7 @@ using OpenChat.API.Models;
 using OpenChat.API.RequestModels;
 using OpenChat.API.Other;
 using System.Security.Claims;
+using OpenChat.API.Interfaces;
 
 namespace OpenChat.API.Controllers
 {
@@ -14,10 +15,12 @@ namespace OpenChat.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<ChatUser> userManager;
+        private readonly IJwtConfiguration jwt;
 
-        public UserController(UserManager<ChatUser> userManager)
+        public UserController(UserManager<ChatUser> userManager, IJwtConfiguration jwt)
         {
             this.userManager = userManager;
+            this.jwt = jwt;
         }
 
         [HttpPost]
@@ -62,7 +65,7 @@ namespace OpenChat.API.Controllers
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
             };
             //Create token
-            string token = JwtConfiguration.CreateToken(claims);
+            string token = jwt.CreateToken(claims);
             return Ok(new { Id = user.Id, Login = user.Email, FirstName = user.FirstName, LastName = user.LastName, Token = token });
         }
     }

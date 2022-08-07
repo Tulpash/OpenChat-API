@@ -6,9 +6,9 @@ namespace OpenChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly ChatManager chatManager;
+        private readonly IChatManager chatManager;
 
-        public ChatHub(ChatManager chatManager)
+        public ChatHub(IChatManager chatManager)
         {
             this.chatManager = chatManager;
         }

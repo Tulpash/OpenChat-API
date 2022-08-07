@@ -16,13 +16,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IJwtConfiguration, JwtConfiguration>();
+builder.Services.AddScoped<IChatManager, ChatManager>();
 builder.Services.AddDbContext<MainContext>(options => options.UseSqlServer(configuration.GetConnectionString("Deff")));
 builder.Services.AddIdentityCore<ChatUser>().AddEntityFrameworkStores<MainContext>();
 builder.Services.AddCors(options => options.AddDefaultPolicy(options => options.WithOrigins("http://localhost:3000", "https://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = JwtConfiguration.ValidationParameters();
+    options.TokenValidationParameters = new JwtConfiguration().ValidationParameters();
     options.Events = new JwtBearerEvents()
     {
         OnMessageReceived = (context) =>
@@ -38,7 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         }
     };
 });
-builder.Services.AddScoped<ChatManager>();
+//builder.Services.AddScoped<ChatManager>();
 
 
 var app = builder.Build();
