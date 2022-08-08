@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IJwtConfiguration, JwtConfiguration>();
-builder.Services.AddScoped<IChatManager, ChatManager>();
+builder.Services.AddScoped<IConnectionManager, ConnectionManager>();
 builder.Services.AddDbContext<MainContext>(options => options.UseSqlServer(configuration.GetConnectionString("Deff")));
 builder.Services.AddIdentityCore<ChatUser>().AddEntityFrameworkStores<MainContext>();
 builder.Services.AddCors(options => options.AddDefaultPolicy(options => options.WithOrigins("http://localhost:3000", "https://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));

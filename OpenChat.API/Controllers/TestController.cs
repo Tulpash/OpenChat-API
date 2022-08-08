@@ -8,14 +8,14 @@ namespace OpenChat.API.Controllers
 {
     [Route("test")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class TestController : ControllerBase
     {
-        private readonly IChatManager chatManager;
+        private readonly IConnectionManager connectionManager;
 
-        public TestController(IChatManager chatManager)
+        public TestController(IConnectionManager connectionManager)
         {
-            this.chatManager = chatManager;
+            this.connectionManager = connectionManager;
         }
 
         [HttpGet]
@@ -27,19 +27,11 @@ namespace OpenChat.API.Controllers
             return Ok($"{userName} authenticated with type {authType}");
         }
 
-        [HttpPost]
-        [Route("add")]
-        public IActionResult AddToChat()
-        {
-            chatManager.AddConnection(ControllerContext.HttpContext.User.Identity?.Name, "wugbeig");
-            return Ok();
-        }
-
         [HttpGet]
         [Route("get")]
         public IActionResult GetChat()
         {           
-            return Ok(chatManager.Users);
+            return Ok(connectionManager.Users);
         }
     }
 }

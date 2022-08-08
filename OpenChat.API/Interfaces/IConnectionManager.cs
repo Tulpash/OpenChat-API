@@ -2,7 +2,7 @@
 
 namespace OpenChat.API.Interfaces
 {
-    public interface IChatManager
+    public interface IConnectionManager
     {
         public void AddConnection(string? userName, string connectionId);
 

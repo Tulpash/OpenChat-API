@@ -6,22 +6,22 @@ namespace OpenChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly IChatManager chatManager;
+        private readonly IConnectionManager connectionManager;
 
-        public ChatHub(IChatManager chatManager)
+        public ChatHub(IConnectionManager connectionManager)
         {
-            this.chatManager = chatManager;
+            this.connectionManager = connectionManager;
         }
 
         public override Task OnConnectedAsync()
         {
-            chatManager.AddConnection(Context.User?.Identity?.Name, Context.ConnectionId);
+            connectionManager.AddConnection(Context.User?.Identity?.Name, Context.ConnectionId);
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception? exception)
         {
-            chatManager.RemoveConnection(Context.ConnectionId);
+            connectionManager.RemoveConnection(Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
     }

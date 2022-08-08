@@ -9,11 +9,16 @@ namespace OpenChat.API.Models
 
         public string LastName { get; set; } = null!;
 
+        public string UniqueName { get; set; } = null!;
+
         //Chats ref
         public Chat[] Chats { get; set; } = null!;
 
         //SignalR connections ref
         [NotMapped]
         public List<ChatConnection> Connections { get; set; } = null!;
+
+        [NotMapped]
+        public string FullName => $"{FirstName} {LastName}"; 
     }
 }
