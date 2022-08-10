@@ -23,12 +23,19 @@ namespace OpenChat.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] NewUser model)
         {
+            //Create unique name
             string uniqueRaw = string.Join("", Guid.NewGuid().ToByteArray());
             string unique = "#";
             Random random = new Random();
             for (int i = 0; i < 10; i++)
             {
                 unique += uniqueRaw[random.Next(0, uniqueRaw.Length)];
+            }
+            //Check unique (Незнаю как сгенирировать конкретно, но надо поправить)
+            var count = userManager.Users.Count(u => u.UniqueName == unique); 
+            if (count > 0)
+            {
+                return BadRequest("Error when create unique name");
             }
             //Create new user
             ChatUser user = new ChatUser()
@@ -49,7 +56,6 @@ namespace OpenChat.API.Controllers
 
         [HttpPost]
         [Route("search")]
-        [AllowAnonymous]
         public IActionResult Search([FromBody] string search)
         {
             IEnumerable<ChatUser> users;
