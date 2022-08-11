@@ -45,7 +45,7 @@ namespace OpenChat.API.Controllers
             };
             //Create token
             string token = jwt.CreateToken(claims);
-            return Ok(new { Id = user.Id, Login = user.Email, FirstName = user.FirstName, LastName = user.LastName, Token = token });
+            return Ok(new { Id = user.Id, Login = user.Email, FirstName = user.FirstName, LastName = user.LastName, Token = token, Unique = user.UniqueName });
         }
     }
 }

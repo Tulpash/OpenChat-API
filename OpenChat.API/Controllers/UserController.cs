@@ -58,6 +58,11 @@ namespace OpenChat.API.Controllers
         [Route("search")]
         public IActionResult Search([FromBody] string search)
         {
+            if (String.IsNullOrEmpty(search))
+            {
+                return Ok(Enumerable.Empty<dynamic>());
+            }
+
             Random rnd = new Random();
             Func<ChatUser, bool> predicate = (user) => user.FirstName.Contains(search); ;
             IEnumerable<dynamic> users;
