@@ -17,5 +17,8 @@ namespace OpenChat.API.Models
         //SignalR connections ref
         [NotMapped]
         public List<ChatConnection> Connections { get; set; } = null!;
+
+        [NotMapped]
+        public string FullName => $"{FirstName} {LastName}";
     }
 }
