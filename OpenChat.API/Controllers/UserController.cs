@@ -58,19 +58,17 @@ namespace OpenChat.API.Controllers
         [Route("search")]
         public IActionResult Search([FromBody] string search)
         {
-            if (String.IsNullOrEmpty(search))
+            if (string.IsNullOrEmpty(search))
             {
                 return Ok(Enumerable.Empty<dynamic>());
             }
-
-            Random rnd = new Random();
             Func<ChatUser, bool> predicate = (user) => user.FirstName.Contains(search); ;
             IEnumerable<dynamic> users;
             if (search.Contains('#'))
             {
                 predicate = (user) => user.UniqueName.Contains(search);
             }
-            users = userManager.Users.Where(predicate).Select(u => new { Id = u.Id, Name = u.FullName, Unique = u.UniqueName, Notifications = rnd.Next(1000) }).ToList();
+            users = userManager.Users.Where(predicate).Select(u => new { Id = u.Id, Name = u.FullName, Unique = u.UniqueName }).ToList();
             return Ok(users);
         }
     }
