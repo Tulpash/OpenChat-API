@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenChat.API.Models;
 using OpenChat.API.RequestModels;
+using System.Security.Cryptography;
 
 namespace OpenChat.API.Controllers
 {
@@ -24,13 +25,7 @@ namespace OpenChat.API.Controllers
         public async Task<IActionResult> Create([FromBody] NewUser model)
         {
             //Create unique name
-            string uniqueRaw = string.Join("", Guid.NewGuid().ToByteArray());
-            string unique = "#";
-            Random random = new Random();
-            for (int i = 0; i < 10; i++)
-            {
-                unique += uniqueRaw[random.Next(0, uniqueRaw.Length)];
-            }
+            string unique = $"#{RandomNumberGenerator.GetInt32(100000000, 999999999)}";
             //Check unique (Незнаю как сгенирировать конкретно, но надо поправить)
             var count = userManager.Users.Count(u => u.UniqueName == unique); 
             if (count > 0)
