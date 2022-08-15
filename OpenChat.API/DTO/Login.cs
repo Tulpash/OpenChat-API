@@ -1,4 +1,4 @@
-﻿namespace OpenChat.API.RequestModels
+﻿namespace OpenChat.API.DTO
 {
     public class Login
     {
