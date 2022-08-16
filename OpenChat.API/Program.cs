@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         {
             string token = context.Request.Query["token"];
             string path = context.HttpContext.Request.Path;
-            if (!String.IsNullOrEmpty(token) && path.StartsWith("/hubs/chat"))
+            if (!string.IsNullOrEmpty(token) && path.StartsWith("/hubs/chat"))
             {
                 context.Token = token;
             }
@@ -57,4 +57,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapHub<ChatHub>("/hubs/chat");
 app.MapControllers();
+app.UseStaticFiles();
 app.Run();
