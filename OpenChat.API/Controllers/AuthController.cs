@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenChat.API.Interfaces;
 using OpenChat.API.Models;
-using OpenChat.API.RequestModels;
+using OpenChat.API.DTO;
 using System.Security.Claims;
 
 namespace OpenChat.API.Controllers

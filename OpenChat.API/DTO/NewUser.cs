@@ -1,6 +1,6 @@
-﻿namespace OpenChat.API.RequestModels
+﻿namespace OpenChat.API.DTO
 {
-    public class NewUser
+    public class Registration
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
