@@ -55,8 +55,19 @@ namespace OpenChat.API.Controllers
         {
             ChatUser user = await userManager.FindByIdAsync(userId);
             var chats = user.Chats?.Where(c => c.Name.Contains(searchString))
-                .Select(c => new ChatPreview() { Id = c.Id, Name = c.Name, LastMessage = "Last message" }) ?? Array.Empty<ChatPreview>();
+                .Select(c => new ChatPreview() { Id = c.Id, LogoUrl = c.LogoUrl, Name = c.Name, LastMessage = "Last message" }) ?? Array.Empty<ChatPreview>();
             return Ok(chats);
+        }
+
+        [HttpPost]
+        [Route("search")]
+        [AllowAnonymous]
+        public IActionResult Search([FromBody] string searchString)
+        {
+            IEnumerable<UserPreview> users = userManager.Users
+                .Where(u => u.FirstName.Contains(searchString))
+                .Select(u => new UserPreview() { Id = u.Id, FullName = u.FullName, Unique = u.UniqueName });
+            return Ok(users);
         }
     }
 }

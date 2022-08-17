@@ -4,6 +4,8 @@
     {
         public Guid Id { get; set; }
 
+        public string LogoUrl { get; set; } = null!;
+
         public string Name { get; set; } = null!;
 
         //Users ref
