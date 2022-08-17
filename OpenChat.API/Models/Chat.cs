@@ -9,9 +9,9 @@
         public string Name { get; set; } = null!;
 
         //Users ref
-        public ChatUser[] Users { get; set; } = null!;
+        public List<ChatUser> Users { get; set; } = null!;
 
         //Messages ref
-        public ChatMessage[] Messages { get; set; } = null!;
+        public List<ChatMessage> Messages { get; set; } = null!;
     }
 }

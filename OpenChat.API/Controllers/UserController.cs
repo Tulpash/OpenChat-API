@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenChat.API.Models;
 using OpenChat.API.DTO;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace OpenChat.API.Controllers
 {
@@ -37,6 +38,7 @@ namespace OpenChat.API.Controllers
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                FullName = $"{model.FirstName} {model.LastName}",
                 Email = model.Email,
                 UserName = model.Email,
                 UniqueName = unique
@@ -50,24 +52,25 @@ namespace OpenChat.API.Controllers
         }
 
         [HttpPost]
-        [Route("{userId}/chats")]
-        public async Task<IActionResult> Chats(string userId, [FromBody] string searchString)
-        {
-            ChatUser user = await userManager.FindByIdAsync(userId);
-            var chats = user.Chats?.Where(c => c.Name.Contains(searchString))
-                .Select(c => new ChatPreview() { Id = c.Id, LogoUrl = c.LogoUrl, Name = c.Name, LastMessage = "Last message" }) ?? Array.Empty<ChatPreview>();
-            return Ok(chats);
-        }
-
-        [HttpPost]
         [Route("search")]
         [AllowAnonymous]
         public IActionResult Search([FromBody] string searchString)
         {
             IEnumerable<UserPreview> users = userManager.Users
-                .Where(u => u.FirstName.Contains(searchString))
+                .Where(u => u.FullName.Contains(searchString))
                 .Select(u => new UserPreview() { Id = u.Id, FullName = u.FullName, Unique = u.UniqueName });
             return Ok(users);
         }
+
+        [HttpPost]
+        [Route("{userId}/chats")]
+        public async Task<IActionResult> Chats(string userId, [FromBody] string searchString)
+        {
+            ChatUser user = await userManager.Users.Where(u => u.Id == userId).Include(u => u.Chats).FirstAsync();
+            var chats = user.Chats?
+                .Where(c => c.Name.Contains(searchString))
+                .Select(c => new ChatPreview() { Id = c.Id, LogoUrl = c.LogoUrl, Name = c.Name, LastMessage = "Last message" }).ToArray() ?? Array.Empty<ChatPreview>();
+            return Ok(chats);
+        }      
     }
 }

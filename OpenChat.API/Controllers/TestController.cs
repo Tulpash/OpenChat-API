@@ -58,10 +58,13 @@ namespace OpenChat.API.Controllers
                     return BadRequest("Error when create unique name");
                 }
                 string email = $"test_{tu}@mail.com";
+                string f = fNames[rnd.Next(0, fNames.Length)];
+                string l = lNames[rnd.Next(0, lNames.Length)];
                 ChatUser user = new ChatUser()
                 {
-                    FirstName = fNames[rnd.Next(0, fNames.Length)],
-                    LastName = lNames[rnd.Next(0, lNames.Length)],
+                    FirstName = f,
+                    LastName = l,
+                    FullName = $"{f} {l}",
                     Email = email,
                     UserName = email,
                     UniqueName = unique

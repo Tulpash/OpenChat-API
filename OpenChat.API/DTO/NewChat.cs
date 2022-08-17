@@ -5,6 +5,6 @@
         public IFormFile? Logo { get; set; }
         public string Name { get; set; } = null!;
 
-        public string[]? Users { get; set; } 
+        public string[] Users { get; set; } = null!;
     }
 }
