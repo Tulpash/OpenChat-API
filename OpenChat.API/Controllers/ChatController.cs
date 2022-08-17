@@ -41,5 +41,12 @@ namespace OpenChat.API.Controllers
                 .Select(c => new ChatPreview() { Id = c.Id, LogoUrl = c.LogoUrl, Name = c.Name, LastMessage = "Пока пусто" });
             return Ok(chats);
         }
+
+        [HttpGet]
+        [Route("{chatId}/info")]
+        public IActionResult Info(Guid chatId)
+        {
+            return Ok(chatManager.Chats.FirstOrDefault(c => c.Id == chatId));
+        }
     }
 }

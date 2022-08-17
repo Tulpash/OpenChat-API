@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OpenChat.API.Data;
 using OpenChat.API.Interfaces;
@@ -20,7 +21,7 @@ namespace OpenChat.API.Managers
         /// <summary>
         /// Return all chats as array
         /// </summary>
-        public Chat[] Chats => mainContext.Chats.Include(c => c.Messages).ToArray();
+        public Chat[] Chats => mainContext.Chats.Include(c => c.Messages).Include(c => c.Users).ToArray();
 
         /// <summary>
         /// Create new chat

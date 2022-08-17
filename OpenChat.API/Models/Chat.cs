@@ -8,6 +8,8 @@
 
         public string Name { get; set; } = null!;
 
+        public Guid OwnerId { get; set; }
+
         //Users ref
         public List<ChatUser> Users { get; set; } = null!;
 
