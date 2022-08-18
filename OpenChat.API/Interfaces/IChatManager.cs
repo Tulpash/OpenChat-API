@@ -4,10 +4,12 @@ namespace OpenChat.API.Interfaces
 {
     public interface IChatManager
     {
-        public Chat[] Chats { get; } 
+        public IQueryable<Chat> Chats { get; } 
 
         public void Create(string name, string logoUrl, string[] userIds);
 
         public void Delete(Guid id);
+
+        public void AddTextMessage(ChatMessage message);
     }
 }

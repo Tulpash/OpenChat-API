@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace OpenChat.API.Models
 {
@@ -13,6 +14,7 @@ namespace OpenChat.API.Models
 
         public string UniqueName { get; set; } = null!;
 
+        [JsonIgnore]
         //Chats ref
         public List<Chat> Chats { get; set; } = null!;
 

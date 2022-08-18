@@ -23,7 +23,7 @@ namespace OpenChat.API.Controllers
         [HttpPost]
         [Route("create")]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] Registration model)
+        public async Task<IActionResult> Create([FromBody] NewUser model)
         {
             //Create unique name
             string unique = $"@{RandomNumberGenerator.GetInt32(100000000, 999999999)}";
@@ -57,8 +57,8 @@ namespace OpenChat.API.Controllers
         public IActionResult Search([FromBody] string searchString)
         {
             IEnumerable<UserPreview> users = userManager.Users
-                .Where(u => u.FullName.Contains(searchString))
-                .Select(u => new UserPreview() { Id = u.Id, FullName = u.FullName, Unique = u.UniqueName });
+                .Where(u => u.FullName.ToLower().Contains(searchString.ToLower()))
+                .Select(u => new UserPreview(u.Id, u.FullName, u.UniqueName));
             return Ok(users);
         }
 
@@ -68,8 +68,8 @@ namespace OpenChat.API.Controllers
         {
             ChatUser user = await userManager.Users.Where(u => u.Id == userId).Include(u => u.Chats).FirstAsync();
             var chats = user.Chats?
-                .Where(c => c.Name.Contains(searchString))
-                .Select(c => new ChatPreview() { Id = c.Id, LogoUrl = c.LogoUrl, Name = c.Name, LastMessage = "Last message" }).ToArray() ?? Array.Empty<ChatPreview>();
+                .Where(c => c.Name.ToLower().Contains(searchString.ToLower()))
+                .Select(c => new ChatPreview(c.Id, c.LogoUrl, c.Name, "Last message")).ToArray() ?? Array.Empty<ChatPreview>();
             return Ok(chats);
         }      
     }

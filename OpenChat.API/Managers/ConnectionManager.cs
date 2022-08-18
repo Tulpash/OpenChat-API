@@ -19,7 +19,7 @@ namespace OpenChat.API.Managers
             this.userManager = userManager;
         }
 
-        public List<ChatUser> Users => users;
+        public IQueryable<ChatUser> Users => users.AsQueryable();
 
         public void AddConnection(string? userName, string connectionId)
         {

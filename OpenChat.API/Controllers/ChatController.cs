@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OpenChat.API.DTO;
 using OpenChat.API.Interfaces;
+using OpenChat.API.Models;
 
 namespace OpenChat.API.Controllers
 {
@@ -37,8 +39,8 @@ namespace OpenChat.API.Controllers
         [Route("search")]
         public IActionResult Search([FromBody] string searchString)
         {
-            var chats = chatManager.Chats.Where(c => c.Name.Contains(searchString))
-                .Select(c => new ChatPreview() { Id = c.Id, LogoUrl = c.LogoUrl, Name = c.Name, LastMessage = "Пока пусто" });
+            var chats = chatManager.Chats.Include(c => c.Messages).Where(c => c.Name.Contains(searchString))
+                .Select(c => new ChatPreview(c.Id, c.LogoUrl, c.Name, "Last message"));
             return Ok(chats);
         }
 
@@ -46,7 +48,9 @@ namespace OpenChat.API.Controllers
         [Route("{chatId}/info")]
         public IActionResult Info(Guid chatId)
         {
-            return Ok(chatManager.Chats.FirstOrDefault(c => c.Id == chatId));
+            Chat chat = chatManager.Chats.Include(c => c.Users).Include(c => c.Messages).First(c => c.Id == chatId);
+            ChatInfo info = new ChatInfo(chat.Name, chat.LogoUrl, chat.Messages, chat.Users);
+            return Ok(info);
         }
     }
 }

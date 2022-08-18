@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OpenChat.API.Data;
 using OpenChat.API.Interfaces;
 using OpenChat.API.Models;
@@ -21,7 +19,7 @@ namespace OpenChat.API.Managers
         /// <summary>
         /// Return all chats as array
         /// </summary>
-        public Chat[] Chats => mainContext.Chats.Include(c => c.Messages).Include(c => c.Users).ToArray();
+        public IQueryable<Chat> Chats => mainContext.Chats;
 
         /// <summary>
         /// Create new chat
@@ -60,6 +58,13 @@ namespace OpenChat.API.Managers
             Chat? toDel = mainContext.Chats.Find(id);
             _ = toDel ?? throw new ArgumentException($"Wrong id");
             mainContext.Chats.Remove(toDel);
+            mainContext.SaveChanges();
+        }
+
+
+        public void AddTextMessage(ChatMessage message)
+        {
+            mainContext.Messages.Add(message);
             mainContext.SaveChanges();
         }
     }

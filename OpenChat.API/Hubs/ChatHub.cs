@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using OpenChat.API.Interfaces;
 using OpenChat.API.Models;
 
@@ -15,7 +16,7 @@ namespace OpenChat.API.Hubs
             this.chatManager = chatManager;
         }
 
-        //
+        //Override to manage user and connections
         public override Task OnConnectedAsync()
         {
             connectionManager.AddConnection(Context.User?.Identity?.Name, Context.ConnectionId);
@@ -28,13 +29,21 @@ namespace OpenChat.API.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        //
-        public async Task SendTextMessage(Guid chatId, string text)
+        //Send text message
+        public async Task SendTextMessage(Guid chatId, string text, string senderId)
         {
-            Chat chat = chatManager.Chats.First(c => c.Id == chatId);
-            ChatUser[] users = connectionManager.Users.IntersectBy<ChatUser, string>(chat.Users.Select(u => u.Id), u => u.Id).ToArray();
+            ChatMessage message = new ChatMessage()
+            {
+                ChatId = chatId,
+                UserId = senderId,
+                Text = text,
+                SendTime = DateTime.Now
+            };
+            chatManager.AddTextMessage(message);
+            Chat chat = chatManager.Chats.Include(c => c.Users).Include(c => c.Messages).First(c => c.Id == chatId);
+            ChatUser[] users = connectionManager.Users.IntersectBy(chat.Users.Select(u => u.Id), u => u.Id).ToArray();
             var connections = users.SelectMany(u => u.Connections.Select(c => c.Id)).ToList();
-            await Clients.Clients(connections).SendAsync("GetMessage", chatId, text);
+            await Clients.Clients(connections).SendAsync("GetMessage", message);
         }
     }
 }
