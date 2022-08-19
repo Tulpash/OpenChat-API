@@ -2,7 +2,7 @@
 {
     public class Chat
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; }
 
         public string LogoUrl { get; set; } = null!;
 
