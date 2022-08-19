@@ -24,7 +24,7 @@ namespace OpenChat.API.Controllers
 
         [HttpPost]
         [Route("signin")]
-        public async Task<IActionResult> Login([FromBody] Login model)
+        public async Task<IActionResult> Login([FromBody] DTO.Login model)
         {
             //Validate params
             var user = await userManager.FindByEmailAsync(model.Email);

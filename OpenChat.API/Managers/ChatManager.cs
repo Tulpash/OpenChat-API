@@ -29,7 +29,7 @@ namespace OpenChat.API.Managers
         /// <param name="userIds"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public void Create(string name, string logoUrl, string[] userIds)
+        public void Create(string name, string logoUrl, string ownerId, string[] userIds)
         {
             _ = name ?? throw new ArgumentNullException($"{nameof(name)} was null");
             _ = logoUrl ?? throw new ArgumentNullException($"{nameof(logoUrl)} was null");
@@ -40,6 +40,7 @@ namespace OpenChat.API.Managers
             {
                 LogoUrl = logoUrl,
                 Name = name,
+                OwnerId = ownerId,
                 Users = users,
                 Messages = new List<ChatMessage>(),
             };
@@ -62,10 +63,18 @@ namespace OpenChat.API.Managers
         }
 
 
-        public void AddTextMessage(ChatMessage message)
+        public ChatMessage AddTextMessage(Guid chatId, string senderId, string text)
         {
+            ChatMessage message = new ChatMessage()
+            {
+                ChatId = chatId,
+                UserId = senderId,
+                Text = text,
+                SendTime = DateTime.Now
+            };
             mainContext.Messages.Add(message);
             mainContext.SaveChanges();
+            return message;
         }
     }
 }

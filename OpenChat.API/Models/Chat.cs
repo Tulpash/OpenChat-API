@@ -8,7 +8,7 @@
 
         public string Name { get; set; } = null!;
 
-        public Guid OwnerId { get; set; }
+        public string OwnerId { get; set; } = null!;
 
         //Users ref
         public List<ChatUser> Users { get; set; } = null!;

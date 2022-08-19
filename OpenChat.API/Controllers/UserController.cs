@@ -63,6 +63,20 @@ namespace OpenChat.API.Controllers
         }
 
         [HttpPost]
+        [Route("{userId}/edit")]
+        public async Task<IActionResult> Edit(string userId, [FromBody] EditUser model)
+        {
+            ChatUser user = await userManager.Users.Where(u => u.Id == userId).FirstAsync();
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.FullName = $"{model.FirstName} {model.LastName}";
+            user.Email = model.Email;
+            user.UserName = model.Email;
+            await userManager.UpdateAsync(user);
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("{userId}/chats")]
         public async Task<IActionResult> Chats(string userId, [FromBody] string searchString)
         {

@@ -31,7 +31,7 @@ namespace OpenChat.API.Controllers
             {
                 url = logoManager.Create(model.Logo);
             }
-            chatManager.Create(model.Name, url, model.Users);
+            chatManager.Create(model.Name, url, model.OwnerId, model.Users);
             return Ok();
         }
 
@@ -49,7 +49,7 @@ namespace OpenChat.API.Controllers
         public IActionResult Info(Guid chatId)
         {
             Chat chat = chatManager.Chats.Include(c => c.Users).Include(c => c.Messages).First(c => c.Id == chatId);
-            ChatInfo info = new ChatInfo(chat.Name, chat.LogoUrl, chat.Messages, chat.Users);
+            ChatInfo info = new ChatInfo(chat.Name, chat.LogoUrl, chat.OwnerId, chat.Messages, chat.Users);
             return Ok(info);
         }
     }

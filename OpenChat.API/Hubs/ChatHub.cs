@@ -32,14 +32,7 @@ namespace OpenChat.API.Hubs
         //Send text message
         public async Task SendTextMessage(Guid chatId, string text, string senderId)
         {
-            ChatMessage message = new ChatMessage()
-            {
-                ChatId = chatId,
-                UserId = senderId,
-                Text = text,
-                SendTime = DateTime.Now
-            };
-            chatManager.AddTextMessage(message);
+            ChatMessage message = chatManager.AddTextMessage(chatId, senderId, text);
             Chat chat = chatManager.Chats.Include(c => c.Users).Include(c => c.Messages).First(c => c.Id == chatId);
             ChatUser[] users = connectionManager.Users.IntersectBy(chat.Users.Select(u => u.Id), u => u.Id).ToArray();
             var connections = users.SelectMany(u => u.Connections.Select(c => c.Id)).ToList();

@@ -6,10 +6,10 @@ namespace OpenChat.API.Interfaces
     {
         public IQueryable<Chat> Chats { get; } 
 
-        public void Create(string name, string logoUrl, string[] userIds);
+        public void Create(string name, string logoUrl, string ownerId, string[] userIds);
 
         public void Delete(Guid id);
 
-        public void AddTextMessage(ChatMessage message);
+        public ChatMessage AddTextMessage(Guid chatId, string senderId, string text);
     }
 }

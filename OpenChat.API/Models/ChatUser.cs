@@ -20,6 +20,7 @@ namespace OpenChat.API.Models
 
         //SignalR connections
         [NotMapped]
+        [JsonIgnore]
         public List<ChatConnection> Connections { get; set; } = null!;
     }
 }
