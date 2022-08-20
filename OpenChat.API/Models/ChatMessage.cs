@@ -4,7 +4,7 @@ namespace OpenChat.API.Models
 {
     public class ChatMessage
     {
-        public Guid Id { get; }
+        public Guid Id { get; set; }
 
         public DateTime SendTime { get; set; }
 

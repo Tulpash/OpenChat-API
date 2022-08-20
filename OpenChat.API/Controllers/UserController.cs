@@ -5,6 +5,9 @@ using OpenChat.API.Models;
 using OpenChat.API.DTO;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using OpenChat.API.Interfaces;
+using System.Security.Claims;
 
 namespace OpenChat.API.Controllers
 {
@@ -14,10 +17,12 @@ namespace OpenChat.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<ChatUser> userManager;
+        private readonly IJwtConfiguration jwt;
 
-        public UserController(UserManager<ChatUser> userManager)
+        public UserController(UserManager<ChatUser> userManager, IJwtConfiguration jwt)
         {
             this.userManager = userManager;
+            this.jwt = jwt;
         }
 
         [HttpPost]
@@ -73,7 +78,14 @@ namespace OpenChat.API.Controllers
             user.Email = model.Email;
             user.UserName = model.Email;
             await userManager.UpdateAsync(user);
-            return Ok();
+            //Create claims
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
+            };
+            //Create token
+            string token = jwt.CreateToken(claims);
+            return Ok(new UserInfo(user.Id, user.Email, user.FirstName, user.LastName, token, user.UniqueName));
         }
 
         [HttpPost]
